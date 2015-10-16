@@ -32,10 +32,16 @@ func play(radioNo string) {
 		if radioData.PlayRadio != "" {
 			fmt.Printf("%s %s\n%s\n",
 				radioData.ChannelTitle, radioData.ProgramName, radioData.PlayRadio)
+			fmt.Println(runtime.GOOS)
 			if runtime.GOOS == "darwin" {
 				if err := exec.Command("/Applications/VLC.app/Contents/MacOS/VLC", radioData.PlayRadio).Start(); err != nil {
 					log.Fatal(err)
 				}
+			} else if runtime.GOOS == "linux" {
+				if err := exec.Command("/usr/bin/vlc", radioData.PlayRadio).Start(); err != nil {
+					log.Fatal(err)
+				}
+
 			}
 		} else {
 			fmt.Println("無廣播頻道！")
@@ -50,8 +56,8 @@ func main() {
 	if len(args) == 1 {
 		play(args[0])
 	} else {
-		//PrintChannel()
-		gohinetradio.GenList()
+		gohinetradio.PrintChannel()
+	//	gohinetradio.GenList()
 		//fmt.Println(GetRadioList(LISTPAGE))
 		fmt.Println("輸入廣播頻道編號：")
 		in := bufio.NewReader(os.Stdin)
